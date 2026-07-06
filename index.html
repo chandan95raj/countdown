@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@700;800&family=Caveat:wght@600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAF7F2;
+            --surface: #FFFFFF;
+            --ink: #24252B;
+            --muted: #83807A;
+            --accent: #B45309;
+            --accent-soft: #FDECD8;
+            --teal: #0F766E;
+            --teal-soft: #E1F2EF;
+            --line: #E4DED2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(36, 37, 43, 0.06) 1px, transparent 0);
+            background-size: 22px 22px;
+        }
+
+        .font-serif-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-bold-display {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .font-script-display {
+            font-family: 'Caveat', cursive;
+        }
+
+        .font-mono-num {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .style-btn {
+            transition: all .18s ease;
+        }
+
+        .style-btn[data-active="true"] {
+            background: var(--ink);
+            color: var(--bg);
+            box-shadow: 0 2px 0 0 var(--ink);
+        }
+
+        .style-btn[data-active="false"] {
+            background: transparent;
+            color: var(--ink);
+        }
+
+        /* Ticket / boarding pass shape */
+        .ticket {
+            position: relative;
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 1px 2px rgba(36, 37, 43, 0.04), 0 12px 30px -12px rgba(36, 37, 43, 0.18);
+        }
+
+        .ticket::before,
+        .ticket::after {
+            content: "";
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: var(--bg);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 0 1px var(--line) inset;
+        }
+
+        .ticket::before {
+            left: -14px;
+        }
+
+        .ticket::after {
+            right: -14px;
+        }
+
+        .perforation {
+            border-left: 2px dashed var(--line);
+        }
+
+        @media (max-width: 767px) {
+
+            .ticket::before,
+            .ticket::after {
+                display: none;
+            }
+
+            .perforation {
+                border-left: none;
+                border-top: 2px dashed var(--line);
+            }
+        }
+
+        .flip-card {
+            background: var(--ink);
+            color: var(--bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 0 0 rgba(36, 37, 43, 0.15);
+        }
+
+        .pulse-once {
+            animation: pulseOnce .35s ease;
+        }
+
+        @keyframes pulseOnce {
+            0% {
+                transform: scale(1);
+            }
+
+            30% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .toast {
+            transition: opacity .25s ease, transform .25s ease;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(30%);
+            cursor: pointer;
+        }
+
+        .eyebrow {
+            letter-spacing: 0.18em;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+    <main class="flex-1 w-full max-w-6xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
+
+        <!-- Header -->
+        <div class="mb-10 sm:mb-14">
+            <h1 class="font-serif-display text-3xl sm:text-4xl md:text-5xl mt-2" style="color:var(--ink)">
+                Countdown Studio
+            </h1>
+            <p class="text-sm sm:text-base mt-3 max-w-xl" style="color:var(--muted)">
+                Name your moment, pick a style, set the date and time — then share it with anyone.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start">
+
+            <!-- FORM PANEL -->
+            <section id="formPanel" class="ticket p-6 sm:p-8 md:rounded-r-none">
+                <p class="text-xs font-semibold uppercase eyebrow mb-6" style="color:var(--muted)">Step 1 — Details</p>
+
+                <label class="block text-sm font-medium mb-2" for="eventName">Countdown name</label>
+                <input id="eventName" type="text" maxlength="40" placeholder="e.g. Diwali Launch, Sarah's Wedding"
+                    class="w-full px-4 py-3 rounded-xl border outline-none text-base mb-1"
+                    style="border-color:var(--line); background:#FCFBF8;">
+                <p id="nameError" class="text-xs mb-5 hidden" style="color:#B4231F">Please enter a name for your
+                    countdown.</p>
+
+                <label class="block text-sm font-medium mb-2">Name style</label>
+                <div class="grid grid-cols-3 gap-2 mb-6">
+                    <button type="button" class="style-btn font-serif-display text-sm py-3 rounded-xl border"
+                        data-style="serif" data-active="true" style="border-color:var(--line);">Elegant</button>
+                    <button type="button" class="style-btn font-bold-display text-sm py-3 rounded-xl border"
+                        data-style="bold" data-active="false" style="border-color:var(--line);">Bold</button>
+                    <button type="button" class="style-btn font-script-display text-sm py-3 rounded-xl border"
+                        data-style="script" data-active="false" style="border-color:var(--line);">Playful</button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-1">
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="eventDate">Date</label>
+                        <input id="eventDate" type="date"
+                            class="w-full px-3 py-3 rounded-xl border outline-none text-sm"
+                            style="border-color:var(--line); background:#FCFBF8;">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="eventTime">Time</label>
+                        <input id="eventTime" type="time" step="1"
+                            class="w-full px-3 py-3 rounded-xl border outline-none text-sm"
+                            style="border-color:var(--line); background:#FCFBF8;">
+                    </div>
+                </div>
+                <p id="dateError" class="text-xs mb-5 hidden" style="color:#B4231F">Please choose a future date and
+                    time.</p>
+
+                <button id="startBtn" class="w-full mt-2 py-3.5 rounded-xl font-semibold text-base"
+                    style="background:var(--accent); color:#FFF;">
+                    Start countdown
+                </button>
+            </section>
+
+            <!-- TICKET / LIVE PANEL -->
+            <section id="ticketPanel" class="ticket perforation p-6 sm:p-8 md:rounded-l-none hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <p class="text-xs font-semibold uppercase eyebrow" style="color:var(--muted)">Now counting down</p>
+                    <button id="editBtn" class="text-xs font-semibold underline hidden"
+                        style="color:var(--teal)">Edit</button>
+                </div>
+
+                <h2 id="ticketName" class="text-2xl sm:text-3xl mb-1 break-words" style="color:var(--ink)">Your event
+                </h2>
+                <p id="ticketDate" class="text-sm mb-6" style="color:var(--muted)"></p>
+
+                <div id="liveGrid" class="grid grid-cols-4 gap-2 sm:gap-3 mb-6">
+                    <div class="text-center">
+                        <div class="flip-card py-3 sm:py-4"><span id="numDays"
+                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
+                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Days</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="flip-card py-3 sm:py-4"><span id="numHours"
+                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
+                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Hours</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="flip-card py-3 sm:py-4"><span id="numMins"
+                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
+                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Mins</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="flip-card py-3 sm:py-4"><span id="numSecs"
+                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
+                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Secs</p>
+                    </div>
+                </div>
+
+                <div id="finishedMsg" class="hidden mb-6 px-4 py-3 rounded-xl text-sm font-medium"
+                    style="background:var(--teal-soft); color:var(--teal)">
+                    🎉 This moment has arrived!
+                </div>
+
+                <button id="shareBtn" class="w-full py-3.5 rounded-xl font-semibold text-base"
+                    style="background:var(--ink); color:var(--bg);">
+                    Share this countdown
+                </button>
+
+                <p id="createOwnLink" class="hidden text-center text-xs mt-4 underline cursor-pointer"
+                    style="color:var(--muted)">
+                    Create your own countdown
+                </p>
+            </section>
+
+        </div>
+
+    </main>
+
+    <footer class="w-full text-center py-6 text-xs" style="color:var(--muted)">
+        Developed by - Chandan Raj
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast"
+        class="toast fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full text-sm font-medium opacity-0 pointer-events-none"
+        style="background:var(--ink); color:var(--bg);">
+        Link copied to clipboard
+    </div>
+
+    <script>
+        (function () {
+            const formPanel = document.getElementById('formPanel');
+            const ticketPanel = document.getElementById('ticketPanel');
+            const nameInput = document.getElementById('eventName');
+            const dateInput = document.getElementById('eventDate');
+            const timeInput = document.getElementById('eventTime');
+            const nameError = document.getElementById('nameError');
+            const dateError = document.getElementById('dateError');
+            const startBtn = document.getElementById('startBtn');
+            const editBtn = document.getElementById('editBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const createOwnLink = document.getElementById('createOwnLink');
+            const styleBtns = document.querySelectorAll('.style-btn');
+            const ticketName = document.getElementById('ticketName');
+            const ticketDate = document.getElementById('ticketDate');
+            const finishedMsg = document.getElementById('finishedMsg');
+            const liveGrid = document.getElementById('liveGrid');
+            const toast = document.getElementById('toast');
+
+            const numDays = document.getElementById('numDays');
+            const numHours = document.getElementById('numHours');
+            const numMins = document.getElementById('numMins');
+            const numSecs = document.getElementById('numSecs');
+
+            const fontClassMap = {
+                serif: 'font-serif-display',
+                bold: 'font-bold-display',
+                script: 'font-script-display'
+            };
+
+            let currentStyle = 'serif';
+            let targetTimestamp = null;
+            let timerId = null;
+            let isSharedView = false;
+
+            styleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    styleBtns.forEach(b => b.setAttribute('data-active', 'false'));
+                    btn.setAttribute('data-active', 'true');
+                    currentStyle = btn.getAttribute('data-style');
+                });
+            });
+
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.style.opacity = '1';
+                toast.style.transform = 'translate(-50%, -8px)';
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translate(-50%, 0)';
+                }, 2200);
+            }
+
+            function applyNameStyle(el, styleKey) {
+                Object.values(fontClassMap).forEach(c => el.classList.remove(c));
+                el.classList.add(fontClassMap[styleKey] || fontClassMap.serif);
+            }
+
+            function formatDateLong(ts) {
+                const d = new Date(ts);
+                return d.toLocaleString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            }
+
+            function pulse(el) {
+                el.classList.remove('pulse-once');
+                void el.offsetWidth;
+                el.classList.add('pulse-once');
+            }
+
+            function tick() {
+                const now = Date.now();
+                const diff = targetTimestamp - now;
+
+                if (diff <= 0) {
+                    numDays.textContent = '00';
+                    numHours.textContent = '00';
+                    numMins.textContent = '00';
+                    numSecs.textContent = '00';
+                    finishedMsg.classList.remove('hidden');
+                    liveGrid.style.opacity = '0.35';
+                    clearInterval(timerId);
+                    return;
+                }
+
+                const days = Math.floor(diff / 86400000);
+                const hours = Math.floor((diff % 86400000) / 3600000);
+                const mins = Math.floor((diff % 3600000) / 60000);
+                const secs = Math.floor((diff % 60000) / 1000);
+
+                const prevSecs = numSecs.textContent;
+                numDays.textContent = String(days).padStart(2, '0');
+                numHours.textContent = String(hours).padStart(2, '0');
+                numMins.textContent = String(mins).padStart(2, '0');
+                numSecs.textContent = String(secs).padStart(2, '0');
+
+                if (prevSecs !== numSecs.textContent) {
+                    pulse(numSecs);
+                }
+            }
+
+            function startCountdown(name, styleKey, ts, fromShare) {
+                currentStyle = styleKey;
+                targetTimestamp = ts;
+                isSharedView = !!fromShare;
+
+                ticketName.textContent = name;
+                applyNameStyle(ticketName, styleKey);
+                ticketDate.textContent = formatDateLong(ts);
+
+                finishedMsg.classList.add('hidden');
+                liveGrid.style.opacity = '1';
+
+                formPanel.classList.add('hidden');
+                ticketPanel.classList.remove('hidden');
+
+                if (isSharedView) {
+                    editBtn.classList.add('hidden');
+                    createOwnLink.classList.remove('hidden');
+                } else {
+                    editBtn.classList.remove('hidden');
+                    createOwnLink.classList.add('hidden');
+                }
+
+                clearInterval(timerId);
+                tick();
+                timerId = setInterval(tick, 1000);
+
+                if (!fromShare) {
+                    const url = buildShareUrl(name, styleKey, ts);
+                    window.history.replaceState({}, '', url);
+                }
+            }
+
+            function validateAndStart() {
+                let valid = true;
+                const name = nameInput.value.trim();
+
+                if (!name) {
+                    nameError.classList.remove('hidden');
+                    valid = false;
+                } else {
+                    nameError.classList.add('hidden');
+                }
+
+                if (!dateInput.value || !timeInput.value) {
+                    dateError.classList.remove('hidden');
+                    valid = false;
+                } else {
+                    const ts = new Date(dateInput.value + 'T' + timeInput.value).getTime();
+                    if (isNaN(ts) || ts <= Date.now()) {
+                        dateError.classList.remove('hidden');
+                        valid = false;
+                    } else {
+                        dateError.classList.add('hidden');
+                        if (valid) {
+                            startCountdown(name, currentStyle, ts, false);
+                        }
+                    }
+                }
+
+                return valid;
+            }
+
+            function buildShareUrl(name, styleKey, ts) {
+                const params = new URLSearchParams();
+                params.set('n', name);
+                params.set('s', styleKey);
+                params.set('t', String(ts));
+                const base = window.location.origin + window.location.pathname;
+                return base + '?' + params.toString();
+            }
+
+            async function shareCountdown() {
+                const url = buildShareUrl(ticketName.textContent, currentStyle, targetTimestamp);
+                const shareData = {
+                    title: 'Countdown: ' + ticketName.textContent,
+                    text: 'Join my countdown to ' + ticketName.textContent,
+                    url: url
+                };
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share(shareData);
+                    } catch (e) { /* user cancelled, ignore */ }
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(url);
+                    showToast('Link copied to clipboard');
+                } catch (e) {
+                    showToast('Could not copy — copy manually');
+                }
+            }
+
+            function resetToForm() {
+                clearInterval(timerId);
+                ticketPanel.classList.add('hidden');
+                formPanel.classList.remove('hidden');
+                const url = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, '', url);
+            }
+
+            startBtn.addEventListener('click', validateAndStart);
+            shareBtn.addEventListener('click', shareCountdown);
+            editBtn.addEventListener('click', resetToForm);
+            createOwnLink.addEventListener('click', resetToForm);
+
+            // Load from share link if present
+            (function initFromUrl() {
+                const params = new URLSearchParams(window.location.search);
+                const n = params.get('n');
+                const s = params.get('s');
+                const t = params.get('t');
+                if (n && t) {
+                    const ts = parseInt(t, 10);
+                    if (!isNaN(ts)) {
+                        startCountdown(n, s || 'serif', ts, true);
+                    }
+                }
+            })();
+
+            // Set sensible default date/time (tomorrow, same time)
+            (function setDefaults() {
+                const now = new Date();
+                now.setDate(now.getDate() + 1);
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                dateInput.value = yyyy + '-' + mm + '-' + dd;
+                timeInput.value = '09:00:00';
+            })();
+        })();
+    </script>
+
+</body>
+
+</html>
