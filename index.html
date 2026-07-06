@@ -6,34 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown Creator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@700;800&family=Caveat:wght@600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@700;800&family=Caveat:wght@600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+
     <style>
         :root {
-            --bg: #FAF7F2;
-            --surface: #FFFFFF;
-            --ink: #24252B;
-            --muted: #83807A;
-            --accent: #B45309;
-            --accent-soft: #FDECD8;
-            --teal: #0F766E;
-            --teal-soft: #E1F2EF;
-            --line: #E4DED2;
+            --bg1: #07111F;
+            --bg2: #0B1730;
+            --bg3: #10294D;
+
+            --surface: rgba(255, 255, 255, 0.92);
+            --surface-strong: #FFFFFF;
+
+            --ink: #0F172A;
+            --muted: #64748B;
+            --soft: #F1F5F9;
+
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --primary-soft: #EEF2FF;
+
+            --accent: #06B6D4;
+            --accent-soft: #ECFEFF;
+
+            --success: #10B981;
+            --success-soft: #ECFDF5;
+
+            --danger: #EF4444;
+            --line: rgba(148, 163, 184, 0.28);
+
+            --shadow: 0 24px 70px rgba(2, 6, 23, 0.28);
+            --card-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
         }
 
         * {
             box-sizing: border-box;
         }
 
+        html {
+            min-height: 100%;
+            scroll-behavior: smooth;
+        }
+
         body {
-            background: var(--bg);
+            min-height: 100vh;
+            margin: 0;
             color: var(--ink);
             font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at 18% 12%, rgba(99, 102, 241, 0.45), transparent 28%),
+                radial-gradient(circle at 80% 18%, rgba(6, 182, 212, 0.35), transparent 28%),
+                radial-gradient(circle at 50% 95%, rgba(16, 185, 129, 0.20), transparent 34%),
+                linear-gradient(135deg, var(--bg1), var(--bg2) 48%, var(--bg3));
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
             background-image:
-                radial-gradient(circle at 1px 1px, rgba(36, 37, 43, 0.06) 1px, transparent 0);
-            background-size: 22px 22px;
+                linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+            background-size: 34px 34px;
+            mask-image: linear-gradient(to bottom, black, transparent 82%);
         }
 
         .font-serif-display {
@@ -52,72 +92,291 @@
             font-family: 'Space Mono', monospace;
         }
 
+        .app-wrapper {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-shell {
+            width: min(100%, 1080px);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .hero-card {
+            width: min(100%, 760px);
+            text-align: center;
+            color: #FFFFFF;
+            padding: 10px 14px 0;
+        }
+
+        .brand-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(14px);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            margin-top: 16px;
+            font-size: clamp(34px, 6vw, 64px);
+            line-height: 0.98;
+            letter-spacing: -0.055em;
+            font-weight: 800;
+        }
+
+        .hero-title span {
+            background: linear-gradient(90deg, #FFFFFF, #C7D2FE, #A5F3FC);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            max-width: 590px;
+            margin: 16px auto 0;
+            color: rgba(226, 232, 240, 0.84);
+            font-size: 15px;
+            line-height: 1.75;
+        }
+
+        .phone-frame {
+            width: min(100%, 960px);
+            margin: 0 auto;
+            padding: 14px;
+            border-radius: 34px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+        }
+
+        .main-card {
+            width: 100%;
+            min-height: 460px;
+            border-radius: 28px;
+            background: rgba(248, 250, 252, 0.96);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content-grid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 460px;
+        }
+
+        .panel {
+            width: 100%;
+            min-height: 460px;
+            padding: 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--surface);
+        }
+
+        .panel-left {
+            border-right: 1px solid var(--line);
+        }
+
+        .panel-right {
+            background:
+                radial-gradient(circle at top right, rgba(99, 102, 241, 0.16), transparent 38%),
+                radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.15), transparent 36%),
+                #FFFFFF;
+        }
+
+        .section-badge {
+            width: fit-content;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            color: var(--primary-dark);
+            background: var(--primary-soft);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 9px;
+        }
+
+        .app-input {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: #F8FAFC;
+            color: var(--ink);
+            border-radius: 18px;
+            padding: 14px 15px;
+            outline: none;
+            font-size: 15px;
+            transition: 0.18s ease;
+        }
+
+        .app-input:focus {
+            border-color: rgba(99, 102, 241, 0.70);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+        }
+
         .style-btn {
             transition: all .18s ease;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: #F8FAFC;
+            color: #334155;
+            box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
         }
 
         .style-btn[data-active="true"] {
-            background: var(--ink);
-            color: var(--bg);
-            box-shadow: 0 2px 0 0 var(--ink);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #FFFFFF;
+            border-color: transparent;
+            box-shadow: 0 12px 26px rgba(79, 70, 229, 0.28);
+            transform: translateY(-1px);
         }
 
-        .style-btn[data-active="false"] {
-            background: transparent;
+        .style-btn[data-active="false"]:hover {
+            background: #FFFFFF;
+            border-color: rgba(99, 102, 241, 0.38);
+        }
+
+        .primary-btn {
+            width: 100%;
+            min-height: 54px;
+            border: 0;
+            border-radius: 18px;
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            box-shadow: 0 16px 32px rgba(79, 70, 229, 0.30);
+            transition: 0.18s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 38px rgba(79, 70, 229, 0.36);
+        }
+
+        .dark-btn {
+            width: 100%;
+            min-height: 54px;
+            border: 0;
+            border-radius: 18px;
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 15px;
+            background: linear-gradient(135deg, #0F172A, #1E293B);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.22);
+            transition: 0.18s ease;
+        }
+
+        .dark-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .countdown-title {
             color: var(--ink);
+            line-height: 1.08;
         }
 
-        /* Ticket / boarding pass shape */
-        .ticket {
-            position: relative;
-            background: var(--surface);
-            border-radius: 20px;
-            box-shadow: 0 1px 2px rgba(36, 37, 43, 0.04), 0 12px 30px -12px rgba(36, 37, 43, 0.18);
+        .countdown-date {
+            color: var(--muted);
+            line-height: 1.6;
         }
 
-        .ticket::before,
-        .ticket::after {
-            content: "";
-            position: absolute;
-            width: 28px;
-            height: 28px;
-            background: var(--bg);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            box-shadow: 0 0 0 1px var(--line) inset;
-        }
-
-        .ticket::before {
-            left: -14px;
-        }
-
-        .ticket::after {
-            right: -14px;
-        }
-
-        .perforation {
-            border-left: 2px dashed var(--line);
-        }
-
-        @media (max-width: 767px) {
-
-            .ticket::before,
-            .ticket::after {
-                display: none;
-            }
-
-            .perforation {
-                border-left: none;
-                border-top: 2px dashed var(--line);
-            }
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 11px;
         }
 
         .flip-card {
-            background: var(--ink);
-            color: var(--bg);
-            border-radius: 12px;
-            box-shadow: 0 6px 0 0 rgba(36, 37, 43, 0.15);
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            border-radius: 20px;
+            background:
+                linear-gradient(160deg, rgba(255, 255, 255, 0.16), transparent 36%),
+                linear-gradient(135deg, #111827, #312E81 54%, #0891B2);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .counter-label {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .success-box {
+            background: var(--success-soft);
+            color: #047857;
+            border: 1px solid rgba(16, 185, 129, 0.22);
+        }
+
+        .tiny-link {
+            color: var(--muted);
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .top-action {
+            color: var(--primary-dark);
+            font-weight: 800;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .toast {
+            transition: opacity .25s ease, transform .25s ease;
+            background: #0F172A;
+            color: #FFFFFF;
+            box-shadow: 0 20px 40px rgba(2, 6, 23, 0.28);
         }
 
         .pulse-once {
@@ -138,145 +397,334 @@
             }
         }
 
-        .toast {
-            transition: opacity .25s ease, transform .25s ease;
-        }
-
         input[type="date"]::-webkit-calendar-picker-indicator,
         input[type="time"]::-webkit-calendar-picker-indicator {
-            filter: invert(30%);
             cursor: pointer;
+            opacity: 0.75;
         }
 
-        .eyebrow {
-            letter-spacing: 0.18em;
+        .footer-text {
+            color: rgba(226, 232, 240, 0.74);
+            text-align: center;
+            font-size: 12px;
+            padding-bottom: 4px;
+        }
+
+        @media (max-width: 767px) {
+            body {
+                background:
+                    radial-gradient(circle at 20% 8%, rgba(99, 102, 241, 0.48), transparent 30%),
+                    radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.32), transparent 32%),
+                    linear-gradient(145deg, #07111F, #0B1730 56%, #0B2447);
+            }
+
+            .app-wrapper {
+                justify-content: flex-start;
+                padding: 18px 12px 20px;
+            }
+
+            .app-shell {
+                gap: 18px;
+            }
+
+            .hero-card {
+                padding: 8px 6px 0;
+            }
+
+            .brand-pill {
+                font-size: 10px;
+                padding: 7px 12px;
+            }
+
+            .hero-title {
+                margin-top: 14px;
+                font-size: 36px;
+                line-height: 1.02;
+            }
+
+            .hero-subtitle {
+                font-size: 13px;
+                line-height: 1.65;
+                margin-top: 12px;
+                padding: 0 8px;
+            }
+
+            .phone-frame {
+                width: min(100%, 420px);
+                padding: 8px;
+                border-radius: 34px;
+                background:
+                    linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+                box-shadow:
+                    0 24px 60px rgba(2, 6, 23, 0.38),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+            }
+
+            .main-card {
+                border-radius: 28px;
+                min-height: auto;
+                overflow: hidden;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .panel {
+                min-height: auto;
+                padding: 24px 18px;
+                align-items: stretch;
+                text-align: left;
+            }
+
+            .panel-left {
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .section-badge {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .field-label {
+                text-align: left;
+            }
+
+            .app-input {
+                border-radius: 17px;
+                padding: 14px 14px;
+                font-size: 14px;
+            }
+
+            .style-btn {
+                border-radius: 16px;
+                padding-top: 12px !important;
+                padding-bottom: 12px !important;
+                font-size: 12px !important;
+            }
+
+            .primary-btn,
+            .dark-btn {
+                min-height: 52px;
+                border-radius: 17px;
+            }
+
+            .panel-right {
+                text-align: center;
+            }
+
+            .counter-grid {
+                gap: 8px;
+            }
+
+            .flip-card {
+                min-height: 64px;
+                border-radius: 17px;
+            }
+
+            .counter-label {
+                font-size: 9px;
+                letter-spacing: 0.11em;
+            }
+
+            .footer-text {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 374px) {
+            .panel {
+                padding: 22px 14px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .counter-grid {
+                gap: 6px;
+            }
+
+            .flip-card {
+                min-height: 58px;
+                border-radius: 15px;
+            }
+
+            .font-mono-num {
+                font-size: 18px !important;
+            }
         }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body>
 
-    <main class="flex-1 w-full max-w-6xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
+    <main class="app-wrapper">
 
-        <!-- Header -->
-        <div class="mb-10 sm:mb-14">
-            <h1 class="font-serif-display text-3xl sm:text-4xl md:text-5xl mt-2" style="color:var(--ink)">
-                Countdown Studio
-            </h1>
-            <p class="text-sm sm:text-base mt-3 max-w-xl" style="color:var(--muted)">
-                Name your moment, pick a style, set the date and time — then share it with anyone.
-            </p>
-        </div>
+        <div class="app-shell">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start">
-
-            <!-- FORM PANEL -->
-            <section id="formPanel" class="ticket p-6 sm:p-8 md:rounded-r-none">
-                <p class="text-xs font-semibold uppercase eyebrow mb-6" style="color:var(--muted)">Step 1 — Details</p>
-
-                <label class="block text-sm font-medium mb-2" for="eventName">Countdown name</label>
-                <input id="eventName" type="text" maxlength="40" placeholder="e.g. Diwali Launch, Sarah's Wedding"
-                    class="w-full px-4 py-3 rounded-xl border outline-none text-base mb-1"
-                    style="border-color:var(--line); background:#FCFBF8;">
-                <p id="nameError" class="text-xs mb-5 hidden" style="color:#B4231F">Please enter a name for your
-                    countdown.</p>
-
-                <label class="block text-sm font-medium mb-2">Name style</label>
-                <div class="grid grid-cols-3 gap-2 mb-6">
-                    <button type="button" class="style-btn font-serif-display text-sm py-3 rounded-xl border"
-                        data-style="serif" data-active="true" style="border-color:var(--line);">Elegant</button>
-                    <button type="button" class="style-btn font-bold-display text-sm py-3 rounded-xl border"
-                        data-style="bold" data-active="false" style="border-color:var(--line);">Bold</button>
-                    <button type="button" class="style-btn font-script-display text-sm py-3 rounded-xl border"
-                        data-style="script" data-active="false" style="border-color:var(--line);">Playful</button>
+            <!-- Header -->
+            <header class="hero-card">
+                <div class="brand-pill">
+                    <span>⏳</span>
+                    <span>Countdown App</span>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mb-1">
-                    <div>
-                        <label class="block text-sm font-medium mb-2" for="eventDate">Date</label>
-                        <input id="eventDate" type="date"
-                            class="w-full px-3 py-3 rounded-xl border outline-none text-sm"
-                            style="border-color:var(--line); background:#FCFBF8;">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2" for="eventTime">Time</label>
-                        <input id="eventTime" type="time" step="1"
-                            class="w-full px-3 py-3 rounded-xl border outline-none text-sm"
-                            style="border-color:var(--line); background:#FCFBF8;">
-                    </div>
-                </div>
-                <p id="dateError" class="text-xs mb-5 hidden" style="color:#B4231F">Please choose a future date and
-                    time.</p>
+                <h1 class="hero-title">
+                    <span>Countdown Studio</span>
+                </h1>
 
-                <button id="startBtn" class="w-full mt-2 py-3.5 rounded-xl font-semibold text-base"
-                    style="background:var(--accent); color:#FFF;">
-                    Start countdown
-                </button>
-            </section>
-
-            <!-- TICKET / LIVE PANEL -->
-            <section id="ticketPanel" class="ticket perforation p-6 sm:p-8 md:rounded-l-none hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <p class="text-xs font-semibold uppercase eyebrow" style="color:var(--muted)">Now counting down</p>
-                    <button id="editBtn" class="text-xs font-semibold underline hidden"
-                        style="color:var(--teal)">Edit</button>
-                </div>
-
-                <h2 id="ticketName" class="text-2xl sm:text-3xl mb-1 break-words" style="color:var(--ink)">Your event
-                </h2>
-                <p id="ticketDate" class="text-sm mb-6" style="color:var(--muted)"></p>
-
-                <div id="liveGrid" class="grid grid-cols-4 gap-2 sm:gap-3 mb-6">
-                    <div class="text-center">
-                        <div class="flip-card py-3 sm:py-4"><span id="numDays"
-                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
-                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Days</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="flip-card py-3 sm:py-4"><span id="numHours"
-                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
-                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Hours</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="flip-card py-3 sm:py-4"><span id="numMins"
-                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
-                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Mins</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="flip-card py-3 sm:py-4"><span id="numSecs"
-                                class="font-mono-num text-xl sm:text-3xl">00</span></div>
-                        <p class="text-[10px] sm:text-xs mt-2 uppercase eyebrow" style="color:var(--muted)">Secs</p>
-                    </div>
-                </div>
-
-                <div id="finishedMsg" class="hidden mb-6 px-4 py-3 rounded-xl text-sm font-medium"
-                    style="background:var(--teal-soft); color:var(--teal)">
-                    🎉 This moment has arrived!
-                </div>
-
-                <button id="shareBtn" class="w-full py-3.5 rounded-xl font-semibold text-base"
-                    style="background:var(--ink); color:var(--bg);">
-                    Share this countdown
-                </button>
-
-                <p id="createOwnLink" class="hidden text-center text-xs mt-4 underline cursor-pointer"
-                    style="color:var(--muted)">
-                    Create your own countdown
+                <p class="hero-subtitle">
+                    Create a beautiful countdown for your special moment, choose a style, set date and time, then share
+                    it with anyone.
                 </p>
-            </section>
+            </header>
+
+            <!-- Main App Card -->
+            <div class="phone-frame">
+                <div class="main-card">
+                    <div class="content-grid">
+
+                        <!-- FORM PANEL -->
+                        <section id="formPanel" class="panel panel-left">
+                            <div>
+                                <p class="section-badge">
+                                    <span>01</span>
+                                    <span>Event Details</span>
+                                </p>
+
+                                <label class="field-label" for="eventName">Countdown name</label>
+                                <input id="eventName" type="text" maxlength="40"
+                                    placeholder="e.g. Diwali Launch, Sarah's Wedding" class="app-input mb-1">
+
+                                <p id="nameError" class="text-xs mb-5 hidden" style="color:var(--danger)">
+                                    Please enter a name for your countdown.
+                                </p>
+
+                                <label class="field-label mt-5">Name style</label>
+
+                                <div class="grid grid-cols-3 gap-2 mb-6">
+                                    <button type="button" class="style-btn font-serif-display text-sm py-3"
+                                        data-style="serif" data-active="true">
+                                        Elegant
+                                    </button>
+
+                                    <button type="button" class="style-btn font-bold-display text-sm py-3"
+                                        data-style="bold" data-active="false">
+                                        Bold
+                                    </button>
+
+                                    <button type="button" class="style-btn font-script-display text-sm py-3"
+                                        data-style="script" data-active="false">
+                                        Playful
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3 mb-1">
+                                    <div>
+                                        <label class="field-label" for="eventDate">Date</label>
+                                        <input id="eventDate" type="date" class="app-input text-sm">
+                                    </div>
+
+                                    <div>
+                                        <label class="field-label" for="eventTime">Time</label>
+                                        <input id="eventTime" type="time" step="1" class="app-input text-sm">
+                                    </div>
+                                </div>
+
+                                <p id="dateError" class="text-xs mb-5 hidden" style="color:var(--danger)">
+                                    Please choose a future date and time.
+                                </p>
+
+                                <button id="startBtn" class="primary-btn mt-5">
+                                    Start Countdown
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- TICKET / LIVE PANEL -->
+                        <section id="ticketPanel" class="panel panel-right hidden">
+                            <div>
+                                <div class="flex items-center justify-between mb-6">
+                                    <p class="section-badge !mb-0">
+                                        <span>02</span>
+                                        <span>Live Timer</span>
+                                    </p>
+
+                                    <button id="editBtn" class="top-action text-xs hidden">
+                                        Edit
+                                    </button>
+                                </div>
+
+                                <h2 id="ticketName"
+                                    class="countdown-title text-2xl sm:text-3xl mb-2 break-words font-serif-display">
+                                    Your event
+                                </h2>
+
+                                <p id="ticketDate" class="countdown-date text-sm mb-7"></p>
+
+                                <div id="liveGrid" class="counter-grid mb-7">
+                                    <div class="text-center">
+                                        <div class="flip-card">
+                                            <span id="numDays" class="font-mono-num text-xl sm:text-3xl">00</span>
+                                        </div>
+                                        <p class="counter-label">Days</p>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <div class="flip-card">
+                                            <span id="numHours" class="font-mono-num text-xl sm:text-3xl">00</span>
+                                        </div>
+                                        <p class="counter-label">Hours</p>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <div class="flip-card">
+                                            <span id="numMins" class="font-mono-num text-xl sm:text-3xl">00</span>
+                                        </div>
+                                        <p class="counter-label">Mins</p>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <div class="flip-card">
+                                            <span id="numSecs" class="font-mono-num text-xl sm:text-3xl">00</span>
+                                        </div>
+                                        <p class="counter-label">Secs</p>
+                                    </div>
+                                </div>
+
+                                <div id="finishedMsg"
+                                    class="success-box hidden mb-6 px-4 py-3 rounded-2xl text-sm font-bold">
+                                    🎉 This moment has arrived!
+                                </div>
+
+                                <button id="shareBtn" class="dark-btn">
+                                    Share Countdown
+                                </button>
+
+                                <p id="createOwnLink" class="hidden text-center text-xs mt-5 tiny-link">
+                                    Create your own countdown
+                                </p>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer-text">
+                Developed by - Chandan Raj
+            </footer>
 
         </div>
 
     </main>
 
-    <footer class="w-full text-center py-6 text-xs" style="color:var(--muted)">
-        Developed by - Chandan Raj
-    </footer>
-
     <!-- Toast -->
     <div id="toast"
-        class="toast fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full text-sm font-medium opacity-0 pointer-events-none"
-        style="background:var(--ink); color:var(--bg);">
+        class="toast fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full text-sm font-bold opacity-0 pointer-events-none">
         Link copied to clipboard
     </div>
 
@@ -328,6 +776,7 @@
                 toast.textContent = msg;
                 toast.style.opacity = '1';
                 toast.style.transform = 'translate(-50%, -8px)';
+
                 setTimeout(() => {
                     toast.style.opacity = '0';
                     toast.style.transform = 'translate(-50%, 0)';
@@ -341,9 +790,14 @@
 
             function formatDateLong(ts) {
                 const d = new Date(ts);
+
                 return d.toLocaleString('en-US', {
-                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-                    hour: '2-digit', minute: '2-digit'
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
                 });
             }
 
@@ -374,6 +828,7 @@
                 const secs = Math.floor((diff % 60000) / 1000);
 
                 const prevSecs = numSecs.textContent;
+
                 numDays.textContent = String(days).padStart(2, '0');
                 numHours.textContent = String(hours).padStart(2, '0');
                 numMins.textContent = String(mins).padStart(2, '0');
@@ -433,11 +888,13 @@
                     valid = false;
                 } else {
                     const ts = new Date(dateInput.value + 'T' + timeInput.value).getTime();
+
                     if (isNaN(ts) || ts <= Date.now()) {
                         dateError.classList.remove('hidden');
                         valid = false;
                     } else {
                         dateError.classList.add('hidden');
+
                         if (valid) {
                             startCountdown(name, currentStyle, ts, false);
                         }
@@ -449,15 +906,19 @@
 
             function buildShareUrl(name, styleKey, ts) {
                 const params = new URLSearchParams();
+
                 params.set('n', name);
                 params.set('s', styleKey);
                 params.set('t', String(ts));
+
                 const base = window.location.origin + window.location.pathname;
+
                 return base + '?' + params.toString();
             }
 
             async function shareCountdown() {
                 const url = buildShareUrl(ticketName.textContent, currentStyle, targetTimestamp);
+
                 const shareData = {
                     title: 'Countdown: ' + ticketName.textContent,
                     text: 'Join my countdown to ' + ticketName.textContent,
@@ -467,7 +928,10 @@
                 if (navigator.share) {
                     try {
                         await navigator.share(shareData);
-                    } catch (e) { /* user cancelled, ignore */ }
+                    } catch (e) {
+                        /* User cancelled share */
+                    }
+
                     return;
                 }
 
@@ -481,8 +945,10 @@
 
             function resetToForm() {
                 clearInterval(timerId);
+
                 ticketPanel.classList.add('hidden');
                 formPanel.classList.remove('hidden');
+
                 const url = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, '', url);
             }
@@ -498,21 +964,26 @@
                 const n = params.get('n');
                 const s = params.get('s');
                 const t = params.get('t');
+
                 if (n && t) {
                     const ts = parseInt(t, 10);
+
                     if (!isNaN(ts)) {
                         startCountdown(n, s || 'serif', ts, true);
                     }
                 }
             })();
 
-            // Set sensible default date/time (tomorrow, same time)
+            // Set sensible default date/time
             (function setDefaults() {
                 const now = new Date();
+
                 now.setDate(now.getDate() + 1);
+
                 const yyyy = now.getFullYear();
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
                 const dd = String(now.getDate()).padStart(2, '0');
+
                 dateInput.value = yyyy + '-' + mm + '-' + dd;
                 timeInput.value = '09:00:00';
             })();
